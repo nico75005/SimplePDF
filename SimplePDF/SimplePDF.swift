@@ -373,7 +373,19 @@ open class SimplePDF {
                 let newOriginX = drawRect.origin.x + currentOffset
                 let newOriginY = drawRect.origin.y + ((CGFloat(i)*rowHeight))
                 
-                let currentFont = { () -> UIFont in
+				let currentAlignment = { () -> ContentAlignment in
+					if let a = tableDefinition?.alignments {
+						if (a.count > j){
+							return a[j]
+						}
+					} else {
+						return alignment
+					}
+
+					return .left
+				}()
+
+				let currentFont = { () -> UIFont in
                     if let f = tableDefinition?.fonts {
                         if (f.count > j){
                             return f[j]
@@ -408,7 +420,7 @@ open class SimplePDF {
                 }()
                 
                 let frame = CGRect(x: newOriginX, y: newOriginY, width: currentColumnWidth, height: rowHeight)
-                drawTextInCell(frame, text: dataArray[i][j] as NSString, alignment: alignment, font: currentFont, textColor: currentTextColor)
+                drawTextInCell(frame, text: dataArray[i][j] as NSString, alignment: currentAlignment, font: currentFont, textColor: currentTextColor)
             }
         }
         
